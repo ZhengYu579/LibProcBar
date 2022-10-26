@@ -1,14 +1,17 @@
-all:ProcBar.c Main.c
-	gcc -shared -fPIC -o libProcBar.so ProcBar.c -lpthread
-	gcc Main.c -o test -lpthread -L./ -lProcBar
+all:./src/ProcBar.c ./src/Main.c
+	mkdir lib
+	mkdir testApp
+	gcc -shared -fPIC -o ./lib/libProcBar.so ./src/ProcBar.c -lpthread -I./inc
+	gcc ./src/Main.c -o ./testApp/test -lpthread -L./lib -lProcBar -I./inc
 
-lib:ProcBar.c
-	gcc -shared -fPIC -o libProcBar.so ProcBar.c -lpthread
+procbar:./src/ProcBar.c
+	mkdir lib
+	gcc -shared -fPIC -o ./lib/libProcBar.so ./src/ProcBar.c -lpthread -I./inc
 
-test:Main.c
-	gcc Main.c -o test -lpthread -l libProcBar.so
+test:./src/Main.c
+	mkdir testApp
+	gcc ./src/Main.c -o ./testApp/test -lpthread -L./lib -lProcBar -I./inc
 
 clean:
-	rm -f libProcBar.so
-	rm -f procbar
-
+	rm -rf ./lib
+	rm -rf ./testApp
