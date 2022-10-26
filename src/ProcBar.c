@@ -10,7 +10,8 @@
 
 #include "ProcBar.h"
 
-// const char *lable = "|/-\\";
+#define SPACE_LENGTH (25)
+
 const char lable[5] = {'|','/','-','\\'};
 
 //定义两个表示线程的变量（标识符）
@@ -37,7 +38,7 @@ S_ProcBar * GetPorcBar(void)
      bar->state = e_stop;
      bar->p_bar = NULL;
      bar->p_text = NULL;
-     bar->progress_value = 0;
+     bar->progress_value = 0.0;
      return bar;
 }
 
@@ -117,7 +118,7 @@ int PorcBarStop(S_ProcBar* bar)
      return 0;
 }
 
-int PorcBarUpdate(S_ProcBar* bar,int porc)
+int PorcBarUpdate(S_ProcBar* bar,float porc)
 {
      if(NULL == bar)
      {
@@ -154,30 +155,30 @@ void *ProcBarThreadFunc(void *arg)
           printf("bar is NULL!\n");
      }
 
-     if (100 < bar->progress_value)
+     if (0.0 > (100.0 - bar->progress_value))
      {
           printf("porc is too big!\n");
      }
 
-     while (100 > bar->progress_value)
+     col = get_win_col();
+
+     if (NULL == bar->p_text)
      {
-          col = get_win_col();
+          barLen = col - SPACE_LENGTH;
+     }
+     else
+     {
+          barLen = col - strlen(bar->p_text) - SPACE_LENGTH;
+     }
 
-          if (NULL == bar->p_text)
-          {
-               barLen = col - 20;
-          }
-          else
-          {
-               barLen = col - strlen(bar->p_text) - 20;
-          }
+     bar->p_bar = (char *)malloc(barLen + 1);
+     if (NULL == bar->p_bar)
+     {
+          printf("PorcBar malloc failed!\n");
+     }
 
-          bar->p_bar = (char *)malloc(barLen + 1);
-          if (NULL == bar->p_bar)
-          {
-               printf("PorcBar malloc failed!\n");
-          }
-
+     while (100.0 - bar->progress_value)
+     {
           memset(bar->p_bar, '\0', barLen + 1);
           for (i = 0; i < barLen; i++)
           {
@@ -193,63 +194,40 @@ void *ProcBarThreadFunc(void *arg)
 
           if (NULL == bar->p_text)
           {
-               printf("[%s][%-3d%%][%c]\r", bar->p_bar, bar->progress_value, lable[labelIndex]);
+               printf("[%s][%6.2f%%][%c]\r", bar->p_bar, bar->progress_value, lable[labelIndex]);
           }
           else
           {
-               printf("%s [%s][%-3d%%][%c]\r", bar->p_text, bar->p_bar, bar->progress_value, lable[labelIndex]);
+               printf("%s [%s][%6.2f%%][%c]\r", bar->p_text, bar->p_bar, bar->progress_value, lable[labelIndex]);
           }
 
           fflush(stdout);
-
-          free(bar->p_bar);
-          bar->p_bar = NULL;
 
           if(e_stop == bar->state)
           {
                break;
           }
 
-          usleep(50000);
+          usleep(100000);
           labelIndex = (labelIndex + 1) % 4;
      }
 
-     if(100 == bar->progress_value)
+     if(0.0 == (100 - bar->progress_value))
      {
-          col = get_win_col();
-
-          if (NULL == bar->p_text)
-          {
-               barLen = col - 20;
-          }
-          else
-          {
-               barLen = col - strlen(bar->p_text) - 20;
-          }
-
-          bar->p_bar = (char *)malloc(barLen + 1);
-          if (NULL == bar->p_bar)
-          {
-               printf("PorcBar malloc failed!\n");
-          }
-
           memset(bar->p_bar, '\0', barLen + 1);
           memset(bar->p_bar, '#', barLen);
           labelIndex = 0;
 
           if (NULL == bar->p_text)
           {
-               printf("[%s][%-3d%%][%c]\r", bar->p_bar, 100, lable[0]);
+               printf("[%s][%6.2f%%][%c]\r", bar->p_bar, 100.00, lable[0]);
           }
           else
           {
-               printf("%s [%s][%-3d%%][%c]\r", bar->p_text, bar->p_bar, 100, lable[0]);
+               printf("%s [%s][%6.2f%%][%c]\r", bar->p_text, bar->p_bar, 100.00, lable[0]);
           }
 
           fflush(stdout);
-
-          free(bar->p_bar);
-          bar->p_bar = NULL;
      }
 
      printf("\n");

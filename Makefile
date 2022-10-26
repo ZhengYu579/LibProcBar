@@ -1,4 +1,6 @@
 all:./src/ProcBar.c ./src/Main.c
+	rm -rf ./lib
+	rm -rf ./testApp
 	mkdir lib
 	mkdir testApp
 	gcc -shared -fPIC -o ./lib/libProcBar.so ./src/ProcBar.c -lpthread -I./inc

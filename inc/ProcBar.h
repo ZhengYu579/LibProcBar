@@ -16,7 +16,7 @@ typedef struct
     E_ProcBarState state;
     char *p_text;
     char *p_bar;
-    int progress_value;
+    float progress_value;
 }S_ProcBar;
 
 S_ProcBar * GetPorcBar(void);
@@ -27,7 +27,7 @@ int PorcBarStart(S_ProcBar* bar);
 
 int PorcBarStop(S_ProcBar* bar);
 
-int PorcBarUpdate(S_ProcBar* bar,int porc);
+int PorcBarUpdate(S_ProcBar* bar,float porc);
 
 void WaitProcBarCompletion(void);
 

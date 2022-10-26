@@ -21,11 +21,11 @@ void read_file_test(char *fileName)
     int readLength = 0;
     unsigned long readSize = 0;
     unsigned long fileSize = 0;
-    double proc = 0.0;
+    float proc = 0.0;
 
     S_ProcBar *bar = NULL;
     int fd = 0;
-    char buff[100];
+    char buff[1024];
 
     printf("read file test start!\n");
     fileSize = get_file_size(fileName);
@@ -46,7 +46,7 @@ void read_file_test(char *fileName)
     {
         readSize += readLength;
         proc = (double)readSize / (double)fileSize;
-        PorcBarUpdate(bar,(int)(proc * 100 ));
+        PorcBarUpdate(bar,(proc * 100));
     }
 
     PorcBarUpdate(bar,100);
