@@ -59,6 +59,7 @@ void read_file_test(char *fileName)
 
 int main(int argc,char *argv[])
 {
+    print_version();
     read_file_test(argv[1]);
     return 0;
 }

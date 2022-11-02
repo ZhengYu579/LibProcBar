@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "config.h"
+
 #define TEXT_MAXLENG    (20)
 
 typedef enum
@@ -18,6 +20,8 @@ typedef struct
     char *p_bar;
     float progress_value;
 }S_ProcBar;
+
+void print_version(void);
 
 S_ProcBar * GetPorcBar(void);
 

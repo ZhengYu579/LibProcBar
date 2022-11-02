@@ -27,6 +27,11 @@ int get_win_col (void)
     return size.ws_col;
 }
 
+void print_version(void)
+{
+     printf("PACKAGE : %s, VERSION : %s\n",PACKAGE,VERSION);
+}
+
 S_ProcBar * GetPorcBar(void)
 {
      S_ProcBar *bar = (S_ProcBar *)malloc(sizeof(S_ProcBar));

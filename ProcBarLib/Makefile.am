@@ -6,6 +6,10 @@ AUTOMAKE_OPTIONS = foreign
 #表示要生成动态库
 lib_LTLIBRARIES = libprocbar.la
 
+# 添加库的版本信息
+libprocbar_la_LDFLAGS =\
+	-version-info @LIBPROCBAR_VERSION_INFO@
+
 #当前目录路径
 CUR_PATH = $(top_srcdir)/ProcBarLib
 

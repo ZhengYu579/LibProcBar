@@ -138,6 +138,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libprocbar_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(libprocbar_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -235,6 +238,8 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
+LIBPROCBAR_VERSION = @LIBPROCBAR_VERSION@
+LIBPROCBAR_VERSION_INFO = @LIBPROCBAR_VERSION_INFO@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
@@ -324,6 +329,11 @@ AUTOMAKE_OPTIONS = foreign
 #表示要生成动态库
 lib_LTLIBRARIES = libprocbar.la
 
+# 添加库的版本信息
+libprocbar_la_LDFLAGS = \
+	-version-info @LIBPROCBAR_VERSION_INFO@
+
+
 #当前目录路径
 CUR_PATH = $(top_srcdir)/ProcBarLib
 
@@ -405,7 +415,7 @@ clean-libLTLIBRARIES:
 	}
 
 libprocbar.la: $(libprocbar_la_OBJECTS) $(libprocbar_la_DEPENDENCIES) $(EXTRA_libprocbar_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libprocbar_la_OBJECTS) $(libprocbar_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(libprocbar_la_LINK) -rpath $(libdir) $(libprocbar_la_OBJECTS) $(libprocbar_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
